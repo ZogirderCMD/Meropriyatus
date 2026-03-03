@@ -1,0 +1,260 @@
+<html>
+    <meta charset="UTF-8">
+    <head>
+        <title id="user">Мероприятия пользователя</title>
+    </head>
+    <link rel="stylesheet" href="/static/styles/style.css">
+    <body>
+        <table>
+            <th id="list" align="left">
+                <button id="crea">Создать мероприятие</button><br>
+                <div id="creationEvent"></div>
+                <a href="/user"><button>Акканут</button></a><br>
+                <table border="5px" id="events"></table>
+            </th>
+            <th id="content" align="left">
+                <button id="backCont">Обратно</button><br><br>
+                <label id="e_l_name">Имя</label><br>
+                <input id="e_a_name"><br>
+                <label id="e_l_desc">Описание</label><br>
+                <textarea id="e_a_desc" rows="20" cols="20"></textarea><br>
+                <label id="e_l_cal">Календарь</label><br>
+                <select id="e_a_cal"></select><br>
+                <label id="e_l_date">Дата</label><br>
+                <input id="e_a_date" type="date"><br>
+                <button id="edit">Изменить</button><br>
+                <div id="editResponse"></div><br>
+                <button id="remove">Удалить</button><br>
+            </th>
+            <th id="creation" align="left">
+                <button id="backCrea">Обратно</button><br><br>
+                <label id="c_l_name">Имя</label><br>
+                <input id="c_a_name"><br>
+                <label id="c_l_desc">Описание</label><br>
+                <textarea id="c_a_desc" rows="20" cols="20"></textarea><br>
+                <label id="c_l_cal">Календарь</label><br>
+                <select id="c_a_cal"></select><br>
+                <label id="c_l_date">Дата</label><br>
+                <input id="c_a_date" type="date"><br>
+                <button id="create">Создать</button><br>
+                <div id="creationResponse"></div>
+                
+            </th>
+        </table>
+
+        <script>
+
+            let eventUID = "00000000"
+
+            async function deleteEvent() {
+                const formData = new FormData()
+                    
+                formData.append("uid", eventUID);
+
+                const response = await fetch("/api/user/event", {
+                        method: "DELETE",
+                        body: formData,
+                        credentials: "include"
+                    }
+                )
+                await reset()
+                window.location.replace("/events")
+            
+            }
+            async function editEvent() {
+                const formData = new FormData()
+                    
+                formData.append("uid", eventUID);
+                formData.append("name", document.getElementById("e_a_name").value);
+                formData.append("desc", document.getElementById("e_a_desc").value);
+                formData.append("calendar", document.getElementById("e_a_cal").value);
+                formData.append("date", document.getElementById("e_a_date").value);
+
+                const response = await fetch("/api/user/event", {
+                        method: "PATCH",
+                        body: formData,
+                        credentials: "include"
+                    }
+                )
+                result = await response.json()
+                if (!response.ok) {
+                    document.getElementById("editResponse").textContent = result.message
+                } else {
+                    await reset()
+                }
+            }
+            async function showEvent(event) {
+                eventUID = event.uid
+                document.getElementById("e_a_name").value = event.name
+                document.getElementById("e_a_desc").value = event.description
+
+                
+                document.getElementById("e_a_cal").textContent = ""
+
+                resp = await enter()
+
+                for (let i = 0; i<resp.calendars.length; i++) {
+                    
+                    opt = document.createElement("option")
+                    opt.value = resp.calendars[i].uid
+                    opt.textContent = resp.calendars[i].name
+
+                    document.getElementById("e_a_cal").appendChild(opt)
+
+                }
+                document.getElementById("e_a_cal").value = event.calendar
+
+                document.getElementById("e_a_date").value = event.date
+            }
+            async function createEvent() {
+                const formData = new FormData()
+                    
+                formData.append("name", document.getElementById("c_a_name").value);
+                formData.append("desc", document.getElementById("c_a_desc").value);
+                formData.append("calendar", document.getElementById("c_a_cal").value);
+                formData.append("date", document.getElementById("c_a_date").value);
+
+                const response = await fetch("/api/user/event", {
+                        method: "POST",
+                        body: formData,
+                        credentials: "include"
+                    }
+                )
+                result = await response.json()
+                if (!response.ok) {
+                    document.getElementById("creationResponse").textContent = result.message
+                } else {
+                    await reset()
+                }
+            }
+
+            async function reset() {
+
+                table = document.getElementById("events")
+                table.textContent = ""
+
+                let tr = document.createElement("tr")
+
+                th = document.createElement("th")
+                th.textContent = "Имя"
+                tr.appendChild(th)
+
+                th = document.createElement("th")
+                th.textContent = "Календарь"
+                tr.appendChild(th)
+
+                th = document.createElement("th")
+                th.textContent = "Дата"
+                tr.appendChild(th)
+
+                th = document.createElement("th")
+                th.textContent = "Действия"
+                tr.appendChild(th)
+
+                table.appendChild(tr)
+
+                resp = await enter()
+
+                for (let i = 0; i<resp.events.length; i++) {
+                    
+                    tr = document.createElement("tr")
+
+                    th = document.createElement("th")
+                    th.textContent = resp.events[i].name
+                    tr.appendChild(th)
+
+                    th = document.createElement("th")
+                    th.textContent = "Unknown"
+
+                    for (let j = 0; j<resp.calendars.length; j++) {
+                        if (resp.calendars[j].uid == resp.events[i].calendar) {
+                            th.textContent = resp.calendars[j].name
+                        }
+                    }
+
+                    tr.appendChild(th)
+
+
+                    th = document.createElement("th")
+                    th.textContent = resp.events[i].date
+                    tr.appendChild(th)
+
+                    but = document.createElement("button")
+                    but.textContent = "Посмотреть"
+                    but.id = resp.events[i].uid
+                    tr.appendChild(but)
+
+                    but.addEventListener("click", async () =>  {
+                            document.getElementById("content").style.display = 'block'
+                            document.getElementById("list").style.display = 'none'
+                            showEvent(resp.events[i])
+                        }
+                    )
+
+                    table.appendChild(tr)
+                }
+
+            }
+            async function enter() {
+                const response = await fetch("/api/user", {
+                        method: "GET",
+                        credentials: "include"
+                    }
+                )
+                if (!response.ok) {
+                    window.location.replace("/login")
+                } else {
+                    let resp = await response.json()
+                    document.getElementById("user").textContent = `Мероприятия ${resp.username}`
+                    return resp
+                }
+            }
+            enter()
+            reset()
+
+            document.getElementById("backCont").addEventListener("click", async () =>  {
+                    document.getElementById("content").style.display = 'none'
+                    document.getElementById("list").style.display = 'block'
+                }
+            )
+            document.getElementById("backCrea").addEventListener("click", async () =>  {
+                    document.getElementById("creation").style.display = 'none'
+                    document.getElementById("list").style.display = 'block'
+                }
+            )
+            document.getElementById("create").addEventListener("click", async () =>  {
+                    await createEvent()
+                }
+            )
+            document.getElementById("remove").addEventListener("click", async () =>  {
+                    await deleteEvent()
+                }
+            )
+            document.getElementById("edit").addEventListener("click", async () =>  {
+                    await editEvent()
+                }
+            )
+            document.getElementById("crea").addEventListener("click", async () =>  {
+                    document.getElementById("creation").style.display = 'block'
+                    document.getElementById("list").style.display = 'none'
+
+                    document.getElementById("c_a_cal").textContent = ""
+
+                    resp = await enter()
+
+                    for (let i = 0; i<resp.calendars.length; i++) {
+                        
+                        opt = document.createElement("option")
+                        opt.value = resp.calendars[i].uid
+                        opt.textContent = resp.calendars[i].name
+
+                        document.getElementById("c_a_cal").appendChild(opt)
+
+                    }
+                }
+            )
+            document.getElementById("content").style.display = 'none'
+            document.getElementById("creation").style.display = 'none'
+        </script>
+    </body>
+</html>

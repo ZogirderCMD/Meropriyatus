@@ -1,0 +1,65 @@
+<html>
+    <meta charset="UTF-8">
+    <head>
+        <title id="user">Страница пользователя</title>
+    </head>
+    <link rel="stylesheet" href="/static/styles/style.css">
+    <body>
+        <div id="user_info"></div><br>
+        <a href="/calendars"><button>Календари</button></a><br>
+        <a href="/events"><button>Мероприятия</button></a><br>
+        <button id="logout">Выйти</button><br>
+        <button id="remove">Удалить аккаунт</button>
+
+        <script>
+            
+            async function enter() {
+                const response = await fetch("/api/user", {
+                        method: "GET",
+                        credentials: "include"
+                    }
+                )
+                if (!response.ok) {
+                    window.location.replace("/login")
+                } else {
+                    let resp = await response.json()
+                    document.getElementById("user_info").textContent = resp.username
+                    document.getElementById("user").textContent = `Страница ${resp.username}`
+                }
+            }
+            enter()
+
+            
+            async function logout() {
+
+                const response = await fetch("/api/user", {
+                        method: "POST",
+                        credentials: "include"
+                    }
+                )
+                window.location.replace("/login")
+
+            }
+
+            async function remove() {
+
+                const response = await fetch("/api/user", {
+                        method: "DELETE",
+                        credentials: "include"
+                    }
+                )
+                window.location.replace("/login")
+
+            }
+
+            document.getElementById("logout").addEventListener("click", async () =>  {
+                    await logout()
+                }
+            )
+            document.getElementById("remove").addEventListener("click", async () =>  {
+                    await remove()
+                }
+            )
+        </script>
+    </body>
+</html>

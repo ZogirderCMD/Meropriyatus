@@ -1,0 +1,69 @@
+<html>
+    <meta charset="UTF-8">
+    <head>
+        <title>
+            Вход
+        </title>
+    </head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
+    <body>
+            <div id="app">
+                <p>
+                    Логин:<br>
+                    <input id="login"/>
+                    <br>Пароль:<br>
+                    <input id="password"/>
+                </p>
+                 <p>
+                    <button id="enter">войти</button>
+                </p>
+                <div id="response"></div>
+            </div>
+            <script>
+                
+                async function enter(){
+                    const response = await fetch("/api/user", {
+                            method: "GET",
+                            credentials: "include"
+                        }
+                    )
+                    if (response.ok) {
+                        window.location.replace("/user")
+                    }
+                }
+                enter()
+
+
+                async function login() {
+
+                    const formData = new FormData()
+                    
+                    formData.append("login", document.getElementById("login").value);
+                    formData.append("pass", document.getElementById("password").value);
+
+                    const response = await fetch("/api/user/login", {
+                            method: "POST",
+                            body: formData,
+                            credentials: "include"
+                        }
+                    )
+                    let result = await response.json();
+                    if (response.status == 200) {
+                        window.location.replace("/user")
+                    } else {
+                        let a = document.getElementById("response")
+                        a.textContent = ""
+                        let b = document.createElement("p")
+                        b.textContent = result.message
+                        a.appendChild(b)
+                    }
+    
+                }
+                document.getElementById("enter").addEventListener("click", async () =>  {
+                        await login()
+                    }
+                );
+
+            </script>
+    </body>
+</html>

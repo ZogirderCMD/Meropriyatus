@@ -1,0 +1,349 @@
+<html>
+    <meta charset="UTF-8">
+    <head>
+        <title id="user">Календари пользователя</title>
+    </head>
+    <link rel="stylesheet" href="/static/styles/style.css">
+    <body>
+        <table>
+            <th id="list" align="left">
+                <button id="createCalendar">Создать календарь</button><br>
+                <div id="creationCalendar"></div><div id="creationResponse"></div><br>
+                <a href="/user"><button>Акканут</button></a><br>
+                <table border="5px" id="calendars">
+
+                </table>
+            </th>
+            <th id="content" align="left">
+                <button id="back">Обратно</button><br>
+                <h3 id="titlecal">Заголовок</h3>
+                <table border="5px" id="calendar">
+                </table><br>
+                <button id="bac">Назад</button><button id="forwr">Вперёд</button>
+            </th>
+            <th id="events" align="left">
+                <button id="bacсk">Обратно</button><br>
+                <h3 id="titlecal">Мероприятия на день</h3>
+                <table border="5px" id="eventsCal">
+                </table><br>
+            </th>
+        </table>
+        <script>
+            
+            dt = new Date()
+            let yearM = dt.getFullYear()
+            let monthM = dt.getMonth()
+            let calUID = "00000000"
+
+            let cracal = 0
+
+            async function showEventsOnDay(enddate) {
+                document.getElementById("eventsCal").textContent = ''
+                resp = await enter()
+                for (let i=0; i < resp.events.length; i++) {
+                    cal = resp.events[i].calendar
+                    ev_enddate = resp.events[i].date
+                    if (cal == calUID && ev_enddate == enddate) {
+                        name = resp.events[i].name
+                        desc = resp.events[i].description
+
+                        tr = document.createElement("tr")
+
+                        th = document.createElement("th")
+
+                        det = document.createElement("details")
+
+                        sum = document.createElement("summary")
+                        sum.textContent = name
+
+                        txt = document.createElement("label")
+                        txt.textContent = desc
+
+                        det.appendChild(sum)
+                        det.appendChild(txt)
+
+                        th.appendChild(det)
+
+                        th.length="120px"
+                        th.setAttribute("align", "left")
+
+                        tr.appendChild(th)
+
+                        document.getElementById("eventsCal").appendChild(tr)
+                    }
+                }
+            }
+
+            async function switchCreateCalendar() {
+                if (cracal == 0) {
+                    cracal = 1
+                    await show()
+                } else {
+                    cracal = 0
+                    await hide()
+                }
+                
+            }
+
+            async function show() {
+                await hide()
+                    
+                document.getElementById("creationCalendar").appendChild(document.createElement("br"))
+
+                nameInput = document.createElement("input")
+                nameInput.id = "name"
+                document.getElementById("creationCalendar").appendChild(nameInput)
+
+                document.getElementById("creationCalendar").appendChild(document.createElement("br"))
+
+                but = document.createElement("button")
+                but.id = "create"
+                but.textContent = "Создать"
+                document.getElementById("creationCalendar").appendChild(but)
+
+
+                document.getElementById("create").addEventListener("click", async () =>  {
+                        await createCalendar()
+                    }
+                )
+
+            }
+            async function hide() {
+                document.getElementById("creationCalendar").textContent = ""
+            }
+            
+            async function createCalendar() {
+                const formData = new FormData()
+                    
+                formData.append("name", document.getElementById("name").value);
+
+                const response = await fetch("/api/user/calendar", {
+                        method: "POST",
+                        body: formData,
+                        credentials: "include"
+                    }
+                )
+                result = await response.json()
+                if (!response.ok) {
+                    document.getElementById("creationResponse").textContent = result.message
+                } else {
+                    await reset()
+                    await hide()
+                }
+            }
+            async function changeCalendar(uid) {
+                but = document.getElementById(uid+"button")
+                if (but.textContent == "Изменить") {
+                    t = document.getElementById(uid)
+                    a = document.createElement("input")
+                    a.id = uid+"input"
+                    a.value = t.textContent
+                    a.size = t.textContent.length
+                    t.textContent = ''
+                    t.appendChild(a)
+                    but.textContent = "Сохранить"
+                } else {
+                    const formData = new FormData()
+                        
+                    formData.append("uid", uid);
+                    formData.append("name", document.getElementById(uid+"input").value);
+
+                    const response = await fetch("/api/user/calendar", {
+                            method: "PATCH",
+                            body: formData,
+                            credentials: "include"
+                        }
+                    )
+                    result = await response.json()
+                    document.getElementById("creationResponse").textContent = ""
+                    if (!response.ok) {
+                        document.getElementById("creationResponse").textContent = result.message
+                    }
+                    await reset()
+                }
+            }
+            async function removeCalendar(uid) {
+                const formData = new FormData()
+                    
+                formData.append("uid", uid);
+
+                const response = await fetch("/api/user/calendar", {
+                        method: "DELETE",
+                        body: formData,
+                        credentials: "include"
+                    }
+                )
+                await reset()
+            }
+            async function chEvent(uid, value) {
+                el = document.getElementById(uid)
+                el.textContent = value
+            }
+            async function showCalendar() {
+                ndt = new Date(yearM, monthM+1, 0)
+                days = ndt.getDate()
+                const nmonths = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"]
+                document.getElementById("titlecal").textContent = `${ndt.getFullYear()} ${nmonths[ndt.getMonth()]}`
+                table = document.getElementById("calendar")
+                table.textContent = ""
+                resp = await enter()
+                events_dict = resp.events
+                c = 0
+                for (let y = 0; y<5; y++) {
+                    tr = document.createElement("tr")
+                    for (let x = 0; x<7; x++) {
+                        c++
+                        if (c < days+1) {
+                            for (let i = 0; i<events_dict.length; i++) {
+                                th = document.createElement("th")
+                                th.textContent = c.toString()
+                                str_monthM = String(monthM+1)
+                                str_c = String(c)
+                                if (str_monthM.length < 2) {str_monthM="0"+str_monthM}
+                                if (str_c.length < 2) {str_c="0"+str_c}
+                                enddate = `${yearM}-${str_monthM}-${str_c}`
+                                th.id = "calendar"
+
+                                cal = events_dict[i].calendar
+                                date = events_dict[i].date
+                                name = events_dict[i].name
+                                if (date == enddate && cal == calUID) {
+                                    th.setAttribute("bgcolor", "lime")
+                                    th.addEventListener("click", async () => {
+                                        document.getElementById("content").style.display = 'none'
+                                        document.getElementById("events").style.display = 'block'
+                                        document.getElementById("list").style.display = 'none'
+                                        await showEventsOnDay(date)
+
+                                    })
+                                }
+                            }
+
+
+                            tr.appendChild(th)
+                        }
+                    }
+                    table.appendChild(tr)
+
+                }
+            }
+
+            async function reset() {
+
+                table = document.getElementById("calendars")
+                table.textContent = ""
+
+                let tr = document.createElement("tr")
+                
+                th = document.createElement("th")
+                th.textContent = "name"
+                tr.appendChild(th)
+                
+                th = document.createElement("th")
+                th.textContent = "actions"
+                tr.appendChild(th)
+
+                table.appendChild(tr)
+
+                resp = await enter()
+
+                for (let i = 0; i<resp.calendars.length; i++) {
+                    
+                    tr = document.createElement("tr")
+
+                    th = document.createElement("th")
+                    th.textContent = resp.calendars[i].name
+                    th.id = resp.calendars[i].uid
+                    tr.appendChild(th)
+
+                    th = document.createElement("th")
+
+                    but = document.createElement("button")
+                    but.textContent = "Удалить"
+
+                    but.addEventListener("click", async () =>  {
+                            await removeCalendar(resp.calendars[i].uid)
+                        }
+                    )
+
+                    th.appendChild(but)
+
+                    but = document.createElement("button")
+                    but.textContent = "Изменить"
+                    but.id = resp.calendars[i].uid+"button"
+
+                    but.addEventListener("click", async () =>  {
+                            await changeCalendar(resp.calendars[i].uid)
+                        }
+                    )
+
+                    th.appendChild(but)
+
+                    but = document.createElement("button")
+                    but.textContent = "Посмотреть"
+                    but.id = resp.calendars[i].uid+"show"
+
+                    but.addEventListener("click", async () =>  {
+                            document.getElementById("content").style.display = 'block'
+                            document.getElementById("list").style.display = 'none'
+                            calUID = resp.calendars[i].uid
+                            await showCalendar()
+                        }
+                    )
+
+                    th.appendChild(but)
+
+                    tr.appendChild(th)
+
+                    table.appendChild(tr)
+                }
+
+            }
+            async function enter() {
+                const response = await fetch("/api/user", {
+                        method: "GET",
+                        credentials: "include"
+                    }
+                )
+                if (!response.ok) {
+                    window.location.replace("/login")
+                } else {
+                    let resp = await response.json()
+                    document.getElementById("user").textContent = `Календари ${resp.username}`
+                    return resp
+                }
+            }
+             
+            document.getElementById("createCalendar").addEventListener("click", async () =>  {
+                    await switchCreateCalendar()
+                }
+            )
+            document.getElementById("back").addEventListener("click", async () =>  {
+                    document.getElementById("content").style.display = 'none'
+                    document.getElementById("events").style.display = 'none'
+                    document.getElementById("list").style.display = 'block'
+                }
+            )
+            document.getElementById("bacсk").addEventListener("click", async () =>  {
+                    document.getElementById("content").style.display = 'block'
+                    document.getElementById("events").style.display = 'none'
+                    document.getElementById("list").style.display = 'none'
+                    await showCalendar()
+                }
+            )
+            document.getElementById("forwr").addEventListener("click", async () =>  {
+                    monthM++
+                    await showCalendar()
+                }
+            )
+            document.getElementById("bac").addEventListener("click", async () =>  {
+                    monthM--
+                    await showCalendar()
+                }
+            )
+            document.getElementById("content").style.display = 'none'
+            document.getElementById("events").style.display = 'none'
+            reset()
+        </script>
+    </body>
+</html>

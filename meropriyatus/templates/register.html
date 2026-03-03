@@ -1,0 +1,55 @@
+<html>
+    <meta charset="UTF-8">
+    <head>
+        <title>
+            Регистрация
+        </title>
+    </head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
+    <body>
+            <div id="app">
+                <p>
+                    Логин:<br>
+                    <input id="login"/>
+                    <br>Пароль:<br>
+                    <input id="password"/>
+                </p>
+                 <p>
+                    <button id="register">Зарегистрироваться</button>
+                </p>
+                <div id="response"></div>
+            </div>
+            <script>
+
+                async function register() {
+
+                    const formData = new FormData()
+                    
+                    formData.append("login", document.getElementById("login").value);
+                    formData.append("pass", document.getElementById("password").value);
+
+                    const response = await fetch("/api/user/register", {
+                            method: "POST",
+                            body: formData,
+                            credentials: "include"
+                        }
+                    )
+                    let result = await response.json();
+                    if (response.status == 200) {
+                        window.location.replace("/user")
+                    } else {
+                        let a = document.getElementById("response")
+                        a.textContent = ""
+                        let b = document.createElement("p")
+                        b.textContent = result.message
+                        a.appendChild(b)
+                    }
+    
+                }
+                document.getElementById("register").addEventListener("click", async () =>  {
+                        await register()
+                    }
+                );
+            </script>
+    </body>
+</html>
