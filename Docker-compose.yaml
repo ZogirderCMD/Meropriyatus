@@ -5,8 +5,6 @@ services:
     restart: always
     env_file:
       - .env
-    volumes:
-      - ./postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
   app:
@@ -17,11 +15,5 @@ services:
       - .env
     depends_on:
       - db
-    volumes:
-      - ./app_data:/var/lib/app/
     ports:
       - "8000:8000"
-
-volumes:
-  postgres_data:
-  app_data:

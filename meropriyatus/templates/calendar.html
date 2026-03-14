@@ -1,0 +1,154 @@
+<html>
+    <meta charset="UTF-8">
+    <head>
+        <title id="{{ calendar }}">Календарь</title>
+    </head>
+    <link rel="stylesheet" href="/static/styles/style.css">
+    <body>
+        <table>
+            <th id="content" align="left">
+                <h3 id="titlecal">Заголовок</h3>
+                <table border="5px" id="calendarr">
+                </table><br>
+                <button id="bac">Назад</button><button id="forwr">Вперёд</button>
+            </th>
+            <th id="events" align="left">
+                <button id="bacсk">Обратно</button><br>
+                <h3 id="titlecal">Мероприятия на день</h3>
+                <table border="5px" id="eventsCal">
+                </table><br>
+            </th>
+        </table>
+        <script>
+            
+            txt = document.querySelector("title").id
+            txt1 = ""
+
+            for (let i = 0; i<txt.length; i++) {
+                if (txt[i] == "'") { txt1 += '"' }
+                else { txt1 += txt[i] }
+            }
+
+            txt1 = txt1.replace("True", "true")
+
+            calendar = JSON.parse(txt1)
+
+            calUID = calendar.uid
+
+            dt = new Date()
+            let yearM = dt.getFullYear()
+            let monthM = dt.getMonth()
+
+
+            async function showEventsOnDay(enddate) {
+                document.getElementById("eventsCal").textContent = ''
+                for (let i=0; i < calendar.events.length; i++) {
+                    ev_enddate = calendar.events[i].date
+                    if (ev_enddate == enddate) {
+                        name = calendar.events[i].name
+                        desc = calendar.events[i].description
+
+                        tr = document.createElement("tr")
+
+                        th = document.createElement("th")
+
+                        det = document.createElement("details")
+
+                        sum = document.createElement("summary")
+                        sum.textContent = name
+
+                        txt = document.createElement("label")
+                        txt.textContent = desc
+
+                        det.appendChild(sum)
+                        det.appendChild(txt)
+
+                        th.appendChild(det)
+
+                        th.length="120px"
+                        th.setAttribute("align", "left")
+
+                        tr.appendChild(th)
+
+                        document.getElementById("eventsCal").appendChild(tr)
+                    }
+                }
+            }
+
+            
+            async function showCalendar() {
+                ndt = new Date(yearM, monthM+1, 0)
+                days = ndt.getDate()
+                const nmonths = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"]
+                document.getElementById("titlecal").textContent = `${ndt.getFullYear()} ${nmonths[ndt.getMonth()]}`
+                table = document.getElementById("calendarr")
+                table.textContent = ""
+                resp = calendar
+                events_dict = resp.events
+                c = 0
+                for (let y = 0; y<6; y++) {
+                    tr = document.createElement("tr")
+                    for (let x = 0; x<7; x++) {
+                        c++
+                        if (c < days+1) {
+                            th = document.createElement("th")
+                            th.textContent = c.toString()
+                            str_monthM = String(monthM+1)
+                            str_c = String(c)
+                            if (str_monthM.length < 2) {str_monthM="0"+str_monthM}
+                            if (str_c.length < 2) {str_c="0"+str_c}
+                            enddate = `${yearM}-${str_monthM}-${str_c}`
+                            th.classList.add("calendar")
+                            th.id = enddate
+
+
+                            tr.appendChild(th)
+                        }
+                    }
+                    table.appendChild(tr)
+
+                }
+
+                used_dats = []
+
+                for (let i = 0; i<events_dict.length; i++) {
+
+
+                    cal = events_dict[i].calendar
+                    let date = events_dict[i].date
+                    name = events_dict[i].name
+
+                    thh = document.getElementById(date)
+                    if (cal == calUID && thh != null && !used_dats.includes(date) ) {
+                        used_dats.push(date)
+                        thh.setAttribute("bgcolor", "lime")
+                        thh.addEventListener("click", async () => {
+                            document.getElementById("content").style.display = 'none'
+                            document.getElementById("events").style.display = 'block'
+                            await showEventsOnDay(date)
+                        })
+                    }
+                }
+            }
+
+            document.getElementById("bacсk").addEventListener("click", async () =>  {
+                    document.getElementById("content").style.display = 'block'
+                    document.getElementById("events").style.display = 'none'
+                    await showCalendar()
+                }
+            )
+            document.getElementById("forwr").addEventListener("click", async () =>  {
+                    monthM++
+                    await showCalendar()
+                }
+            )
+            document.getElementById("bac").addEventListener("click", async () =>  {
+                    monthM--
+                    await showCalendar()
+                }
+            )
+            document.getElementById("events").style.display = 'none'
+            showCalendar()
+        </script>
+    </body>
+</html>

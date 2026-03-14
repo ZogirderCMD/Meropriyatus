@@ -17,7 +17,7 @@
             <th id="content" align="left">
                 <button id="back">Обратно</button><br>
                 <h3 id="titlecal">Заголовок</h3>
-                <table border="5px" id="calendar">
+                <table border="5px" id="calendarr">
                 </table><br>
                 <button id="bac">Назад</button><button id="forwr">Вперёд</button>
             </th>
@@ -72,6 +72,7 @@
                         document.getElementById("eventsCal").appendChild(tr)
                     }
                 }
+                console.log("")
             }
 
             async function switchCreateCalendar() {
@@ -184,40 +185,25 @@
                 days = ndt.getDate()
                 const nmonths = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"]
                 document.getElementById("titlecal").textContent = `${ndt.getFullYear()} ${nmonths[ndt.getMonth()]}`
-                table = document.getElementById("calendar")
+                table = document.getElementById("calendarr")
                 table.textContent = ""
                 resp = await enter()
                 events_dict = resp.events
                 c = 0
-                for (let y = 0; y<5; y++) {
+                for (let y = 0; y<6; y++) {
                     tr = document.createElement("tr")
                     for (let x = 0; x<7; x++) {
                         c++
                         if (c < days+1) {
-                            for (let i = 0; i<events_dict.length; i++) {
-                                th = document.createElement("th")
-                                th.textContent = c.toString()
-                                str_monthM = String(monthM+1)
-                                str_c = String(c)
-                                if (str_monthM.length < 2) {str_monthM="0"+str_monthM}
-                                if (str_c.length < 2) {str_c="0"+str_c}
-                                enddate = `${yearM}-${str_monthM}-${str_c}`
-                                th.id = "calendar"
-
-                                cal = events_dict[i].calendar
-                                date = events_dict[i].date
-                                name = events_dict[i].name
-                                if (date == enddate && cal == calUID) {
-                                    th.setAttribute("bgcolor", "lime")
-                                    th.addEventListener("click", async () => {
-                                        document.getElementById("content").style.display = 'none'
-                                        document.getElementById("events").style.display = 'block'
-                                        document.getElementById("list").style.display = 'none'
-                                        await showEventsOnDay(date)
-
-                                    })
-                                }
-                            }
+                            th = document.createElement("th")
+                            th.textContent = c.toString()
+                            str_monthM = String(monthM+1)
+                            str_c = String(c)
+                            if (str_monthM.length < 2) {str_monthM="0"+str_monthM}
+                            if (str_c.length < 2) {str_c="0"+str_c}
+                            enddate = `${yearM}-${str_monthM}-${str_c}`
+                            th.classList.add("calendar")
+                            th.id = enddate
 
 
                             tr.appendChild(th)
@@ -226,6 +212,50 @@
                     table.appendChild(tr)
 
                 }
+
+                used_dats = []
+
+                for (let i = 0; i<events_dict.length; i++) {
+
+
+                    cal = events_dict[i].calendar
+                    let date = events_dict[i].date
+                    name = events_dict[i].name
+
+                    thh = document.getElementById(date)
+                    if (cal == calUID && thh != null && !used_dats.includes(date) ) {
+                        used_dats.push(date)
+                        thh.setAttribute("bgcolor", "lime")
+                        thh.addEventListener("click", async () => {
+                            document.getElementById("content").style.display = 'none'
+                            document.getElementById("events").style.display = 'block'
+                            document.getElementById("list").style.display = 'none'
+                            await showEventsOnDay(date)
+                        })
+                    }
+                }
+            }
+
+            async function switchAccessButton(button, chbox) {
+                document.getElementById(button).disabled = document.getElementById(chbox).checked
+            }
+
+            async function switchAccessCalendar(calendar, chebox) {
+
+                chbox = document.getElementById(chebox)
+                
+                const formData = new FormData()
+                            
+                formData.append("uid", calendar);
+                formData.append("access", !chbox.checked);
+
+    
+                const response = await fetch("/api/user/calendar/access", {
+                        method: "POST",
+                        body: formData,
+                        credentials: "include"
+                        }
+                )
             }
 
             async function reset() {
@@ -292,6 +322,43 @@
                     )
 
                     th.appendChild(but)
+                    
+                    div = document.createElement("div")
+
+                    chbox = document.createElement("input")
+                    chbox.type = "checkbox"
+                    chbox.id = `chbox${resp.calendars[i].uid}`
+                    chbox.checked = resp.calendars[i].accessible
+
+                    labl = document.createElement("label")
+                    labl.textContent = "Публичный"
+
+                    th.appendChild(chbox)
+                    th.appendChild(labl)
+
+                    // th.appendChild(div)
+                    
+                    but1 = document.createElement("button")
+                    but1.textContent = "Ссылка"
+                    but1.disabled = !resp.calendars[i].accessible
+                    but1.id = `access${resp.calendars[i].uid}`
+
+                    th.appendChild(but1)
+
+                    chbox.addEventListener("mousedown", async () =>  {  
+                            await switchAccessButton(`access${resp.calendars[i].uid}`,`chbox${resp.calendars[i].uid}` )
+                            await switchAccessCalendar(resp.calendars[i].uid, `chbox${resp.calendars[i].uid}`)
+
+                        }
+                    )
+
+                    but1.addEventListener("mousedown", async () =>  {
+                            if (!but.disabled) { 
+                                inputValue = `${window.location.protocol}//${window.location.host}/calendar/${resp.calendars[i].uid}`
+                                await navigator.clipboard.writeText(inputValue)
+                            }
+                        }
+                    )
 
                     tr.appendChild(th)
 

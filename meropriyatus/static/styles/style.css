@@ -2,7 +2,7 @@ body {
     background-color: beige;
     color: black;
 }
-th#calendar {
+th.calendar {
     text-align: left;
     width: 100px;
     height: 100px;

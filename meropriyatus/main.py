@@ -62,7 +62,7 @@ class Calendar:
         self.uid = res[0][0]
         self.name = res[0][1]
         self.owner = res[0][2]
-        self.accessible = False
+        self.accessible = res[0][3]
         return self.make_response(200, "Успешно!")
         
     def create(self, name:str=None, owner:int=None):
@@ -74,8 +74,13 @@ class Calendar:
         self.name = name
         self.owner = owner
         self.accessible = False
-        query("""INSERT INTO calendars VALUES (%s, %s, %s)""", (self.uid, self.name, self.owner))
+        query("""INSERT INTO calendars VALUES (%s, %s, %s, %s)""", (self.uid, self.name, self.owner, self.accessible))
         return self.make_response(200, self.uid)
+    
+    def see(self):
+        if self.accessible: return self.make_response(200, self.jsonify())
+        else: return self.make_response(404, "Календарь не найден!")
+
     def edit(self, name:str=None):
         if not name is None: self.name = name
         if not name is None and len(name)>30: return self.make_response(403, "Имя должно быть не более 30 символов!")
@@ -87,7 +92,10 @@ class Calendar:
         if res == []: return self.make_response(403, "Календаря с таким uid не существует!")
         query(f"""DELETE FROM calendars WHERE uid='{self.uid}'""")
         return self.make_response(200, "Календарь успешно удалён!")
-    
+    def switchAccess(self, a:bool):
+        self.accessible = a
+        query("""UPDATE calendars SET accessible=%s WHERE uid=%s""", (self.accessible, self.uid))
+        return self.make_response(200, "Успшено изменён доступ!")
     def save(self):
         query("""UPDATE calendars SET name=%s WHERE uid=%s""", (self.name, self.uid))
 
@@ -190,7 +198,6 @@ class User:
     login:str = ""
     password:str = ""
     session_key:str=""
-    admin:bool = False
     events:list = []
     cals:list = []
     authed:bool = False
@@ -313,6 +320,15 @@ class User:
         status = cal.remove()
         self.getElements()
         return status
+    def accessCalendar(self, uid:str, a:bool):
+        if self.authed is False: return self.make_response(403, "Сначала зайдите в аккаунт!")
+        if not uid in self.cals: return self.make_response(404, "Календарь не найден!")
+        cal = Calendar()
+        result = cal.get(uid)
+        if result[1] != 200: return result
+        status = cal.switchAccess(a)
+        self.getElements()
+        return status
     
     def getElements(self):
         if self.authed is False: return self.make_response(403, "Сначала зайдите в аккаунт!")
@@ -407,6 +423,17 @@ def user_calendar():
     if request.method == "DELETE":
         return user.deleteCalendar(uid)
 
+@app.route("/api/user/calendar/access", methods=["POST"])
+def user_calendar_access():
+    user = User()
+    key = request.cookies.get('key', None)
+    result = user.auth(key)
+    uid = request.form.get('uid', '0')
+    if result[1] != 200: return result
+    if request.method == "POST":
+        access = request.form.get('access', None)
+        return user.accessCalendar(uid, access)
+
 @app.route("/api/user/event", methods=["GET", "POST", "PATCH", "DELETE"])
 def user_event():
     user = User()
@@ -431,13 +458,20 @@ def user_event():
         desc = request.form.get('desc', None)
         calendar = request.form.get('calendar', None)
         date_raw = request.form.get('date', None).split("-")
-        try:
-            date = datetime.datetime(int(date_raw[0]),int(date_raw[1]),int(date_raw[2]))
+        try: date = datetime.datetime(int(date_raw[0]),int(date_raw[1]),int(date_raw[2]))
         except IndexError: return {"message": "Правильный формат даты - ГГГГ-ММ-ДД"}, 403
         except ValueError: return {"message": "Год, месяц, день должны быть числами!"}, 403
         return user.editEvent(uid, name, desc, calendar, date)
     if request.method == "DELETE":
         return user.deleteEvent(uid)
+
+@app.route("/calendar/<uid>")
+def calendar(uid):
+    cal = Calendar()
+    cal.get(uid)
+    result = cal.see()
+    if result[1] == 404: return render_template("not_found_calendar.html")
+    else: return render_template("calendar.html", calendar=result[0]['message'])
 
 @app.route("/")
 def index():
