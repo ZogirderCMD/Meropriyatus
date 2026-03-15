@@ -1,5 +1,5 @@
 body {
-    background-color: beige;
+    background-color: rgb(185, 185, 185);
     color: black;
 }
 th.calendar {
@@ -15,4 +15,124 @@ textarea#c_a_desc {
 textarea#e_a_desc {
     width: 200px;
     height: 150px
+}
+
+table.eventsList {
+    border-collapse: collapse;
+    border: 10px solid gray;
+    border-radius: 20px;
+}
+
+input {
+    background: white;
+    border-color: rgb(158, 158, 158);
+    border-radius: 30px;
+    border-width: 20px;
+    font-size: 50px;
+    margin-top: 15px;
+
+}
+input::placeholder {
+    color: rgb(197, 197, 197);
+}
+
+button.leftpanel {
+    background: rgb(197, 197, 197);
+    border-radius: 20px;
+    border-width: 0px;
+    margin-top: 25%;
+    padding-left: 15px;
+    padding-top: 15px;
+    padding-right: 15px;
+    padding-bottom: 15px;
+    font-size: 50px;
+}
+button.leftpanel:hover {
+    background: rgb(172, 172, 172);
+    border-width: 0px;
+    font-size: 50px;
+}
+
+button.default {
+    color: white;
+    background: rgb(197, 197, 197);
+    border-color: rgb(158, 158, 158);
+    border-radius: 30px;
+    border-width: 20px;
+    font-size: 50px;
+}
+button.default:hover {
+    color: rgb(0, 0, 0);
+    background: rgb(197, 197, 197);
+    border-color: rgb(255, 255, 255);
+}
+button.red {
+    color: white;
+    background: rgb(242, 167, 167);
+    border-color: rgb(185, 127, 127);
+    border-radius: 30px;
+    border-width: 20px;
+    margin-top: 15px;
+    font-size: 50px;
+}
+button.red:hover {
+    color: rgb(0, 0, 0);
+    background: rgb(185, 127, 127);
+    border-color: rgb(242, 167, 167);
+}
+button.green {
+    color: white;
+    background: rgb(174, 231, 182);
+    border-color: rgb(152, 192, 162);
+    border-radius: 30px;
+    border-width: 20px;
+    margin-top: 15px;
+    font-size: 50px;
+}
+button.green:hover {
+    color: rgb(0, 0, 0);
+    background: rgb(152, 192, 162);
+    border-color: rgb(174, 231, 182);
+}
+
+div.mainpanel {
+    background-color: rgb(217, 217, 217);
+    padding-top: 15px;
+    padding-left: 15px;
+    padding-right: 60%;
+    padding-bottom: 100%;
+    margin-top: 7%;
+    margin-left: 9%;
+    border-radius: 20px;
+    position: fixed
+}
+div.titlepanel {
+    color: white;
+    background-color:rgb(185, 185, 185);
+    font-size: 75px;
+    padding-right: 120%;
+    padding-left: 10%;
+    padding-top: 1%;
+    padding-bottom: 1%;
+    border-radius: 20px;
+    position: fixed
+    
+}
+div.leftpanel {
+    background-color: rgb(158, 158, 158);
+    padding-bottom: 100%;
+    padding-left: 1%;
+    padding-right: 1%;
+    border-radius: 20px;
+    position: fixed
+}
+
+path#locked {
+    fill:rgb(159, 105, 105)
+}
+path#unlocked {
+    fill:rgb(127, 127, 127)
+}
+path#active {
+    fill:rgb(255, 255, 255)
 }

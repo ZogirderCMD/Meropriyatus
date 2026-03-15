@@ -3,44 +3,38 @@
     <head>
         <title id="user">Мероприятия пользователя</title>
     </head>
-    <link rel="stylesheet" href="/static/styles/style.css">
+    <link rel="stylesheet" href="../static/styles/style.css">
     <body>
-        <table>
-            <th id="list" align="left">
-                <button id="crea">Создать мероприятие</button><br>
-                <div id="creationEvent"></div>
-                <a href="/user"><button>Акканут</button></a><br>
-                <table border="5px" id="events"></table>
-            </th>
-            <th id="content" align="left">
-                <button id="backCont">Обратно</button><br><br>
-                <label id="e_l_name">Имя</label><br>
-                <input id="e_a_name"><br>
-                <label id="e_l_desc">Описание</label><br>
-                <textarea id="e_a_desc" rows="20" cols="20"></textarea><br>
-                <label id="e_l_cal">Календарь</label><br>
-                <select id="e_a_cal"></select><br>
-                <label id="e_l_date">Дата</label><br>
-                <input id="e_a_date" type="date"><br>
-                <button id="edit">Изменить</button><br>
-                <div id="editResponse"></div><br>
-                <button id="remove">Удалить</button><br>
-            </th>
-            <th id="creation" align="left">
-                <button id="backCrea">Обратно</button><br><br>
-                <label id="c_l_name">Имя</label><br>
-                <input id="c_a_name"><br>
-                <label id="c_l_desc">Описание</label><br>
-                <textarea id="c_a_desc" rows="20" cols="20"></textarea><br>
-                <label id="c_l_cal">Календарь</label><br>
-                <select id="c_a_cal"></select><br>
-                <label id="c_l_date">Дата</label><br>
-                <input id="c_a_date" type="date"><br>
-                <button id="create">Создать</button><br>
-                <div id="creationResponse"></div>
-                
-            </th>
-        </table>
+        <div class="titlepanel">
+            Мероприятия
+        </div>
+        <div class="mainpanel">
+            <table>
+                <th id="list" align="left">
+                    <button id="crea" class="green">Создать мероприятие</button><br>
+                    <table id="events" class="eventsList"></table>
+                </th>
+                <th id="content" align="left">
+                    <input id="e_a_name" placeholder="Имя"><br>
+                    <textarea id="e_a_desc" rows="20" cols="20" placeholder="Описание"></textarea><br>
+                    <select id="e_a_cal"></select><br>
+                    <input id="e_a_date" type="date"><br>
+                    <div id="editResponse"></div><br>
+                    <button id="edit">Изменить</button><br>
+                    <button id="remove">Удалить</button><br>
+                </th>
+                <th id="creation" align="left">
+                    <button id="backCrea">Обратно</button><br><br>
+                    <input id="c_a_name" placeholder="Имя"><br>
+                    <textarea id="c_a_desc" rows="20" cols="20" placeholder="Описание"></textarea><br>
+                    <select id="c_a_cal"></select><br>
+                    <input id="c_a_date" type="date"><br>
+                    <button id="create">Создать</button><br>
+                    <div id="creationResponse"></div>
+                    
+                </th>
+            </table>
+        </div>
 
         <script>
 

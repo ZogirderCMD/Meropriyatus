@@ -85,7 +85,41 @@
                 table.textContent = ""
                 resp = calendar
                 events_dict = resp.events
-                c = 0
+                
+                
+                ttday = (new Date(yearM,monthM,1).getDay()+6)%7
+                cc = 0
+                if (ttday > 0) { 
+                    let tr = document.createElement("tr")
+                    for (let i = 0; i < ttday; i++) {
+                        let th = document.createElement("th")
+                        th.classList.add("calendar")
+                        th.style.visibility = 'hidden'
+                        tr.appendChild(th)
+                    }
+                    for (let i = 0; i < 7-ttday; i++) {
+                        cc++
+                        let th = document.createElement("th")
+                        th.textContent = cc.toString()
+                        let str_monthM = String(monthM+1)
+                        let str_cc = String(cc)
+                        if (str_monthM.length < 2) {str_monthM="0"+str_monthM}
+                        if (str_cc.length < 2) {str_cc="0"+str_cc}
+                        let enddate = `${yearM}-${str_monthM}-${str_cc}`
+                        th.classList.add("calendar")
+                        th.id = enddate
+
+                        let gday = (new Date(yearM,monthM,cc).getDay()+6)%7
+                        if (gday >= 5) { th.setAttribute("bgcolor", "tomato") }
+
+                        tr.appendChild(th)
+                    }
+                    table.appendChild(tr)
+                }
+
+
+                var c = cc
+
                 for (let y = 0; y<6; y++) {
                     tr = document.createElement("tr")
                     for (let x = 0; x<7; x++) {
@@ -100,6 +134,9 @@
                             enddate = `${yearM}-${str_monthM}-${str_c}`
                             th.classList.add("calendar")
                             th.id = enddate
+
+                            let gday = (new Date(yearM,monthM,c).getDay()+6)%7
+                            if (gday >= 5) { th.setAttribute("bgcolor", "tomato") }
 
 
                             tr.appendChild(th)
@@ -121,7 +158,7 @@
                     thh = document.getElementById(date)
                     if (cal == calUID && thh != null && !used_dats.includes(date) ) {
                         used_dats.push(date)
-                        thh.setAttribute("bgcolor", "lime")
+                        thh.setAttribute("bgcolor", "orange")
                         thh.addEventListener("click", async () => {
                             document.getElementById("content").style.display = 'none'
                             document.getElementById("events").style.display = 'block'
@@ -129,6 +166,17 @@
                         })
                     }
                 }
+
+                ttdate = new Date()
+                tmonth = String(ttdate.getMonth()+1)
+                tday = String(ttdate.getDate())
+                if (tmonth.length < 2) {tmonth="0"+tmonth}
+                if (tday.length < 2) {tday="0"+str_c}
+                edate = `${ttdate.getFullYear()}-${tmonth}-${tday}`
+
+                tth = document.getElementById(edate)
+                if (tth.getAttribute("bgcolor") == "orange") { tth.setAttribute("bgcolor", "cyan") }
+                else { tth.setAttribute("bgcolor", "lime") }
             }
 
             document.getElementById("bacсk").addEventListener("click", async () =>  {
