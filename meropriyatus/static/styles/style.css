@@ -18,9 +18,27 @@ textarea#e_a_desc {
 }
 
 table.eventsList {
-    border-collapse: collapse;
-    border: 10px solid gray;
+    border-collapse: separate;
+    border: 15px solid rgb(158, 158, 158);
+    background-color: rgb(158, 158, 158);
+    border-spacing: 0;
     border-radius: 20px;
+    font-size: 75px;
+    color: white;
+}
+table.eventsList th {
+    border: 10px solid rgb(158, 158, 158);
+    border-radius: 20px;
+    background-color: rgb(197, 197, 197);
+}
+
+select {
+    background: white;
+    border-color: rgb(158, 158, 158);
+    border-radius: 30px;
+    border-width: 20px;
+    font-size: 50px;
+    margin-top: 15px;
 }
 
 input {
@@ -30,9 +48,21 @@ input {
     border-width: 20px;
     font-size: 50px;
     margin-top: 15px;
-
 }
 input::placeholder {
+    color: rgb(197, 197, 197);
+}
+
+textarea {
+    background: white;
+    border-color: rgb(158, 158, 158);
+    border-radius: 30px;
+    border-width: 20px;
+    font-size: 50px;
+    margin-top: 15px;
+
+}
+textarea::placeholder {
     color: rgb(197, 197, 197);
 }
 
@@ -66,6 +96,14 @@ button.default:hover {
     background: rgb(197, 197, 197);
     border-color: rgb(255, 255, 255);
 }
+button.backButton {
+    border-width: 0px;
+    border-radius: 20px;
+    background: rgb(185, 185, 185);
+}
+button.backButton:hover {
+    background: rgb(255, 255, 255);
+}
 button.red {
     color: white;
     background: rgb(242, 167, 167);
@@ -80,6 +118,20 @@ button.red:hover {
     background: rgb(185, 127, 127);
     border-color: rgb(242, 167, 167);
 }
+button.orange {
+    color: white;
+    background: rgb(241, 219, 183);
+    border-color: rgb(201, 158, 135);
+    border-radius: 30px;
+    border-width: 20px;
+    margin-top: 15px;
+    font-size: 50px;
+}
+button.orange:hover {
+    color: rgb(0, 0, 0);
+    background: rgb(201, 158, 135);
+    border-color: rgb(241, 219, 183);
+}
 button.green {
     color: white;
     background: rgb(174, 231, 182);
@@ -93,6 +145,14 @@ button.green:hover {
     color: rgb(0, 0, 0);
     background: rgb(152, 192, 162);
     border-color: rgb(174, 231, 182);
+}
+button.see {
+    background: rgb(72, 168, 48);
+    border-width: 0px;
+    border-radius: 30px;
+}
+button.see:hover {
+    background: rgb(36, 85, 24);
 }
 
 div.mainpanel {
@@ -110,7 +170,6 @@ div.titlepanel {
     color: white;
     background-color:rgb(185, 185, 185);
     font-size: 75px;
-    padding-right: 120%;
     padding-left: 10%;
     padding-top: 1%;
     padding-bottom: 1%;
@@ -125,6 +184,18 @@ div.leftpanel {
     padding-right: 1%;
     border-radius: 20px;
     position: fixed
+}
+div#response {
+    color: tomato;
+    font-size: 40px;
+}
+div#creationResponse {
+    color: tomato;
+    font-size: 40px;
+}
+div#editResponse {
+    color: tomato;
+    font-size: 40px;
 }
 
 path#locked {

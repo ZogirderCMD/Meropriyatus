@@ -5,9 +5,12 @@
             Регистрация
         </title>
     </head>
-    <link rel="stylesheet" href="../static/styles/style.css">
+    <link rel="stylesheet" href="/static/styles/style.css">
     <body>
         <div class="titlepanel">
+            <button class="backButton" id="backButton">
+                <img src="/static/icons/rect1.svg" height="50" width="50">
+            </button>
             Мероприятус
         </div>
             <div class="mainpanel">
@@ -106,7 +109,11 @@
                 document.getElementById("register").addEventListener("click", async () =>  {
                         await register()
                     }
-                );
+                )
+                document.getElementById("backButton").addEventListener("click", async () =>  {
+                    window.location.replace("/")
+                    }
+                )
             </script>
     </body>
 </html>
