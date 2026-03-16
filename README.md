@@ -13,7 +13,9 @@
 | 3 | `sudo apt install docker-compose-plugin` | Установка docker compose |
 # Установка веб приложения
 Просто клонируйте репозиторий в папку, где будете хранить веб-приложение
+| --- |
 | `git clone https://github.com/ZogirderCMD/Meropriyatus.git` |
+| --- |
 # Настройка веб-приложения
 После установки веб-приложения, откройте файл `.env`
 | `sudo nano .env` |
