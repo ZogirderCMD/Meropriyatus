@@ -8,6 +8,7 @@
 Для работы веб приложения необходимо установить docker и docker compose
 | № | Действие | Описание |
 | --- | --- | --- |
-| 1 | `sudo apt install docker` |  |
-| 2 | `sudo apt install docker` | Установка docker |
+| 1 | `sudo apt update` | Обновление пакетов |
+| 2 | `sudo apt install docker.io` | Установка docker |
+| 3 | `sudo apt install docker-compose-plugin` | Установка docker compose |
 # Примечания
