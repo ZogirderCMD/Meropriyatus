@@ -1,3 +1,6 @@
+html {
+    font-family: 'Courier New', Courier, monospace;
+}
 body {
     background-color: rgb(185, 185, 185);
     color: black;
@@ -26,10 +29,38 @@ table.eventsList {
     font-size: 75px;
     color: white;
 }
+table#eventsCal {
+    margin-top: 50px;
+}
 table.eventsList th {
     border: 10px solid rgb(158, 158, 158);
     border-radius: 20px;
     background-color: rgb(197, 197, 197);
+}
+
+table#calendarr {
+    border-collapse: separate;
+    border: 15px solid rgb(158, 158, 158);
+    background-color: rgb(158, 158, 158);
+    border-spacing: 0;
+    border-radius: 20px;
+    font-size: 75px;
+    color: white;
+}
+table#calendarr th {
+    border: 10px solid rgb(158, 158, 158);
+    border-radius: 20px;
+    background-color: rgb(197, 197, 197);
+    text-align: center;
+}
+table#calendarr th.today {
+    background-color: rgb(98, 218, 116);
+}
+table#calendarr th.events {
+    background-color: rgb(251, 179, 134);
+}
+table#calendarr th.rest {
+    background-color: rgb(251, 134, 134);
 }
 
 select {
@@ -76,11 +107,13 @@ button.leftpanel {
     padding-right: 15px;
     padding-bottom: 15px;
     font-size: 50px;
+    cursor: pointer;
 }
 button.leftpanel:hover {
     background: rgb(172, 172, 172);
     border-width: 0px;
     font-size: 50px;
+    cursor: pointer;
 }
 
 button.default {
@@ -90,19 +123,23 @@ button.default {
     border-radius: 30px;
     border-width: 20px;
     font-size: 50px;
+    cursor: pointer;
 }
 button.default:hover {
     color: rgb(0, 0, 0);
     background: rgb(197, 197, 197);
     border-color: rgb(255, 255, 255);
+    cursor: pointer;
 }
 button.backButton {
     border-width: 0px;
     border-radius: 20px;
     background: rgb(185, 185, 185);
+    cursor: pointer;
 }
 button.backButton:hover {
     background: rgb(255, 255, 255);
+    cursor: pointer;
 }
 button.red {
     color: white;
@@ -112,11 +149,13 @@ button.red {
     border-width: 20px;
     margin-top: 15px;
     font-size: 50px;
+    cursor: pointer;
 }
 button.red:hover {
     color: rgb(0, 0, 0);
     background: rgb(185, 127, 127);
     border-color: rgb(242, 167, 167);
+    cursor: pointer;
 }
 button.orange {
     color: white;
@@ -126,11 +165,13 @@ button.orange {
     border-width: 20px;
     margin-top: 15px;
     font-size: 50px;
+    cursor: pointer;
 }
 button.orange:hover {
     color: rgb(0, 0, 0);
     background: rgb(201, 158, 135);
     border-color: rgb(241, 219, 183);
+    cursor: pointer;
 }
 button.green {
     color: white;
@@ -140,31 +181,75 @@ button.green {
     border-width: 20px;
     margin-top: 15px;
     font-size: 50px;
+    cursor: pointer;
 }
 button.green:hover {
     color: rgb(0, 0, 0);
     background: rgb(152, 192, 162);
     border-color: rgb(174, 231, 182);
+    cursor: pointer;
 }
 button.see {
     background: rgb(72, 168, 48);
     border-width: 0px;
     border-radius: 30px;
+    cursor: pointer;
 }
 button.see:hover {
     background: rgb(36, 85, 24);
+    cursor: pointer;
+}
+button.edit {
+    background: rgb(255, 169, 49);
+    border-width: 0px;
+    border-radius: 30px;
+    cursor: pointer;
+}
+button.edit:hover {
+    background: rgb(138, 92, 28);
+    cursor: pointer;
+}
+button.remove {
+    background: rgb(252, 81, 81);
+    border-width: 0px;
+    border-radius: 30px;
+    cursor: pointer;
+}
+button.remove:hover {
+    background: rgb(116, 37, 37);
+    cursor: pointer;
+}
+button.link {
+    background: rgb(55, 195, 234);
+    border-width: 0px;
+    border-radius: 30px;
+    cursor: pointer;
+}
+button.link:hover {
+    background: rgb(25, 95, 114);
+    cursor: pointer;
+}
+button.link[disabled] {
+    background: rgb(252, 81, 81);
+    border-width: 0px;
+    border-radius: 30px;
+    cursor: pointer;
+}
+button.link[disabled]:hover {
+    background: rgb(116, 37, 37);
+    cursor: pointer;
 }
 
 div.mainpanel {
     background-color: rgb(217, 217, 217);
     padding-top: 15px;
     padding-left: 15px;
-    padding-right: 60%;
+    padding-right: 600;
     padding-bottom: 100%;
     margin-top: 7%;
     margin-left: 9%;
     border-radius: 20px;
-    position: fixed
+    position: absolute
 }
 div.titlepanel {
     color: white;
@@ -185,6 +270,13 @@ div.leftpanel {
     border-radius: 20px;
     position: fixed
 }
+div#titlecal {
+    padding-left: 300px;
+    padding-top: 30px;
+    padding-bottom: 20px;
+    color: rgb(158, 158, 158);
+    font-size: 50;
+}
 div#response {
     color: tomato;
     font-size: 40px;
@@ -197,6 +289,17 @@ div#editResponse {
     color: tomato;
     font-size: 40px;
 }
+div.notfound {
+    font-size: 300px;
+    font-weight: 1000;
+    color: rgb(252, 81, 81);
+    text-align: center;
+}
+div.notfound1 {
+    font-size: 50px;
+    color: rgb(158, 158, 158);
+    text-align: center;
+}
 
 path#locked {
     fill:rgb(159, 105, 105)
@@ -206,4 +309,18 @@ path#unlocked {
 }
 path#active {
     fill:rgb(255, 255, 255)
+}
+input[type="checkbox"] {
+    appearance: none;
+    position: block;
+    opacity: 100;
+    cursor: pointer;
+    height: 75;
+    width: 75;
+    border: 10px solid rgb(158, 158, 158);
+    border-radius: 30px;
+    background-color: rgb(197, 197, 197);
+}
+input[type="checkbox"]:checked {
+    background-color: rgb(127, 127, 127);
 }
