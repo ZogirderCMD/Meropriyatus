@@ -28,5 +28,5 @@
 | POSTGRES_PORT | Порт базы данных |
 # Запуск веб-приложения
 Введите в терминале \
-`sudo docker compose up --build -d` \ 
+`sudo docker compose up --build -d` \
 И ждите завершения запуска контейнера
