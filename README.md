@@ -8,6 +8,6 @@
 Для работы веб приложения необходимо установить docker и docker compose
 | № | Действие | Описание |
 | --- | --- | --- |
-| 1 | `sudo apt install docker` | Установка docker, в зависимости от менеджера пакета вместо apt могут быть другие значения |
+| 1 | `sudo apt install docker` |  |
 | 2 | `sudo apt install docker` | Установка docker |
 # Примечания
