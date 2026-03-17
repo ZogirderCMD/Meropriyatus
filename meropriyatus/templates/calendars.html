@@ -316,6 +316,7 @@
                     thh = document.getElementById(date)
                     if (cal == calUID && thh != null && !used_dats.includes(date) ) {
                         used_dats.push(date)
+                        thh.classList.remove("rest")
                         thh.classList.add("events")
                         thh.addEventListener("click", async () => {
                             document.getElementById("content").style.display = 'none'
