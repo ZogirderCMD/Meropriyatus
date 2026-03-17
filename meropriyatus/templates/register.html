@@ -17,9 +17,9 @@
                 <p>
                     <input id="login" placeholder="Логин"/>
                     <br>
-                    <input id="password" placeholder="Пароль"/>
+                    <input type="password" id="password" placeholder="Пароль"/>
                     <br>
-                    <input id="password" placeholder="Повторение пароля"/>
+                    <input type="password" id="password1" placeholder="Повторение пароля"/>
                 </p>
                 <div id="response"></div>
                  <p>
@@ -82,6 +82,15 @@
             <script>
 
                 async function register() {
+                    if (document.getElementById("password").value != document.getElementById("password1").value) { 
+                        let a = document.getElementById("response")
+                        a.textContent = ""
+                        let b = document.createElement("p")
+                        b.textContent = "Пароли не совпадают!"
+                        a.appendChild(b)
+			            return
+                    }
+
 
                     const formData = new FormData()
                     
