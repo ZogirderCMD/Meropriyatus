@@ -246,8 +246,8 @@ div.mainpanel {
     padding-left: 15px;
     padding-right: 600;
     padding-bottom: 100%;
-    margin-top: 7%;
-    margin-left: 9%;
+    margin-top: 100;
+    margin-left: 175;
     border-radius: 20px;
     position: absolute
 }
@@ -255,9 +255,9 @@ div.titlepanel {
     color: white;
     background-color:rgb(185, 185, 185);
     font-size: 75px;
-    padding-left: 10%;
-    padding-top: 1%;
-    padding-bottom: 1%;
+    padding-left: 200;
+    padding-top: 10;
+    padding-bottom: 10;
     border-radius: 20px;
     position: fixed
     
@@ -265,8 +265,8 @@ div.titlepanel {
 div.leftpanel {
     background-color: rgb(158, 158, 158);
     padding-bottom: 100%;
-    padding-left: 1%;
-    padding-right: 1%;
+    padding-left: 15;
+    padding-right: 15;
     border-radius: 20px;
     position: fixed
 }
