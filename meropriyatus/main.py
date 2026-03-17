@@ -385,11 +385,10 @@ def user_login():
     if result[1] != 200: return result
     resp = make_response(result)
     key = request.cookies.get('key', None)
-    if not key is None:
-        resp.set_cookie(
-            "key",
-            user.session_key
-        )
+    resp.set_cookie(
+        "key",
+        user.session_key
+    )
     return resp
 
 @app.route("/api/user", methods=["GET", "DELETE", "POST"])
