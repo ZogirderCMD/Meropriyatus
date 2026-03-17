@@ -9,11 +9,13 @@
 | --- | --- | --- |
 | 1 | `sudo apt update` | Обновление пакетов |
 | 2 | `sudo apt install ca-certificates curl gnupg` | Установка зависимостей |
-| 2 | `sudo install -m 0755 -d /etc/apt/keyrings` \ `curl -fsSL https://download.docker.com/linux/ubuntu/gpg \ ` \ `sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg` | Дабовление официального gpg ключа docker |
-| 2 | `sudo apt install docker.io` | Установка docker |
-| 3 | `mkdir -p ~/.docker/cli-plugins/` | Создание папки для плагинов docker |
-| 4 | `curl -SL https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose` | Скачивание плагина |
-| 5 | `chmod +x ~/.docker/cli-plugins/docker-compose` | Делаем файл исполняемым |
+| 3 | `sudo install -m 0755 -d /etc/apt/keyrings` | Добавление официального gpg ключа docker |
+|  | `curl -fsSL https://download.docker.com/linux/ubuntu/gpg ` |  |
+|  | `sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg` |  |
+|  | `sudo chmod a+r /etc/apt/keyrings/docker.gpg` |  |
+| 4 | `echo \ "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \ https://download.docker.com/linux/ubuntu \ $(. /etc/os-release && echo $VERSION_CODENAME) stable"` | Добавление репозитория docker |
+|  | `sudo tee /etc/apt/sources.list.d/docker.list > /dev/null` |  |
+| 5 | `sudo apt install docker-ce docker-ce-cli containerd.io docker-compose-plugin` | Установка docker и docker-compose |
 | 6 | `docker compose version` | Проверка |
 # Установка веб приложения
 Просто клонируйте репозиторий в папку, где будете хранить веб-приложение\
