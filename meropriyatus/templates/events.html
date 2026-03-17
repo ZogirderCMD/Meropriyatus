@@ -1,35 +1,35 @@
 <html>
     <meta charset="UTF-8">
     <head>
-        <title id="user">РњРµСЂРѕРїСЂРёСЏС‚РёСЏ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ</title>
+        <title id="user">Мероприятия пользователя</title>
     </head>
     <link rel="stylesheet" href="/static/styles/style.css">
     <body>
         <div class="titlepanel">
             <button class="backButton" style="display:none" id="backButton">
                 <img src="/static/icons/rect1.svg" height="50" width="50">
-            </button>РњРµСЂРѕРїСЂРёСЏС‚РёСЏ
+            </button>Мероприятия
         </div>
         <div class="mainpanel">
             <table>
                 <th id="list" align="left">
-                    <button id="crea" class="green">РЎРѕР·РґР°С‚СЊ РјРµСЂРѕРїСЂРёСЏС‚РёРµ</button><br><br>
+                    <button id="crea" class="green">Создать мероприятие</button><br><br>
                     <table id="events" class="eventsList"></table>
                 </th>
                 <th id="content" align="left">
                     <table>
                         <tr>
                             <th align="left">
-                                <input id="e_a_name" placeholder="РРјСЏ"><br>
-                                <textarea id="e_a_desc" style="height: 500px; width: 600px;" rows="20" cols="20" placeholder="РћРїРёСЃР°РЅРёРµ"></textarea><br>
+                                <input id="e_a_name" placeholder="Имя"><br>
+                                <textarea id="e_a_desc" style="height: 500px; width: 600px;" rows="20" cols="20" placeholder="Описание"></textarea><br>
                             </th>
                             <th align="left">
                                 <select id="e_a_cal">
                                 </select><br>
                                 <input id="e_a_date" type="date"><br>
                                 <div id="editResponse"></div><br>
-                                <button id="edit" class="orange">РР·РјРµРЅРёС‚СЊ</button><br>
-                                <button id="remove" class="red">РЈРґР°Р»РёС‚СЊ</button><br>
+                                <button id="edit" class="orange">Изменить</button><br>
+                                <button id="remove" class="red">Удалить</button><br>
                             </th>
                         </tr>
                     </table>
@@ -38,13 +38,13 @@
                     <table>
                         <tr>
                             <th align="left">
-                                <input id="c_a_name" placeholder="РРјСЏ"><br>
-                                <textarea id="c_a_desc" style="height: 500px; width: 600px;" rows="20" cols="20" placeholder="РћРїРёСЃР°РЅРёРµ"></textarea><br>
+                                <input id="c_a_name" placeholder="Имя"><br>
+                                <textarea id="c_a_desc" style="height: 500px; width: 600px;" rows="20" cols="20" placeholder="Описание"></textarea><br>
                             </th>
                             <th align="left">
                                 <select id="c_a_cal"></select><br>
                                 <input id="c_a_date" type="date"><br>
-                                <button id="create" class="green">РЎРѕР·РґР°С‚СЊ</button><br>
+                                <button id="create" class="green">Создать</button><br>
                                 <div id="creationResponse"></div>
                             </th>
                         </tr>
@@ -292,7 +292,7 @@
                     window.location.replace("/login")
                 } else {
                     let resp = await response.json()
-                    document.getElementById("user").textContent = `РњРµСЂРѕРїСЂРёСЏС‚РёСЏ ${resp.username}`
+                    document.getElementById("user").textContent = `Мероприятия ${resp.username}`
                     return resp
                 }
             }
