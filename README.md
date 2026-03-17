@@ -9,7 +9,10 @@
 | --- | --- | --- |
 | 1 | `sudo apt update` | Обновление пакетов |
 | 2 | `sudo apt install docker.io` | Установка docker |
-| 3 | `sudo apt install docker-compose-plugin` | Установка docker compose |
+| 3 | `mkdir -p ~/.docker/cli-plugins/` | Создание папки для плагинов docker |
+| 4 | `curl -SL https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose` | Скачивание плагина |
+| 5 | `chmod +x ~/.docker/cli-plugins/docker-compose` | Делаем файл исполняемым |
+| 6 | `docker compose version` | Проверка |
 # Установка веб приложения
 Просто клонируйте репозиторий в папку, где будете хранить веб-приложение\
 `git clone https://github.com/ZogirderCMD/Meropriyatus.git`
