@@ -8,6 +8,8 @@
 | № | Действие | Описание |
 | --- | --- | --- |
 | 1 | `sudo apt update` | Обновление пакетов |
+| 2 | `sudo apt install ca-certificates curl gnupg` | Установка зависимостей |
+| 2 | `sudo install -m 0755 -d /etc/apt/keyrings` \ `curl -fsSL https://download.docker.com/linux/ubuntu/gpg \ ` \ `sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg` | Дабовление официального gpg ключа docker |
 | 2 | `sudo apt install docker.io` | Установка docker |
 | 3 | `mkdir -p ~/.docker/cli-plugins/` | Создание папки для плагинов docker |
 | 4 | `curl -SL https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose` | Скачивание плагина |
