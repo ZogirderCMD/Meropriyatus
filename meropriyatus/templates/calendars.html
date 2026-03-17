@@ -471,17 +471,17 @@
 
                     th.appendChild(but1)
 
-                    chbox.addEventListener("mousedown", async () =>  {  
+                    chbox.addEventListener("click", async () =>  {  
                             await switchAccessButton(`access${resp.calendars[i].uid}`,`chbox${resp.calendars[i].uid}` )
                             await switchAccessCalendar(resp.calendars[i].uid, `chbox${resp.calendars[i].uid}`)
 
                         }
                     )
 
-                    but1.addEventListener("mousedown", async () =>  {
+                    but1.addEventListener("click", async () =>  {
                             if (!but1.disabled) { 
                                 inputValue = `${window.location.protocol}//${window.location.host}/calendar/${resp.calendars[i].uid}`
-                                await navigator.clipboard.writeText(inputValue)
+                                await window.open(inputValue)
                             }
                         }
                     )
